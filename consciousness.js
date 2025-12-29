@@ -285,7 +285,7 @@ class ConsciousnessOrchestrator {
     // Stop all thread servers
     for (const thread of this.threads) {
       try {
-        await this.handler.stop([thread.url])
+        await this.handler.stop([thread.url], null)
         await util.logLine(colors.gray(`  Stopped ${thread.name}`))
       } catch (error) {
         await util.logLine(colors.red(`  Error stopping ${thread.name}: ${error.message}`))

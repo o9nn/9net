@@ -57,7 +57,9 @@ class Handler {
         models: kwargs.models || []
       }
       
-      // Start in background (don't await)
+      // Start in background (don't await) - consciousness runs continuously
+      // and we don't want to block the API call. Errors are logged but don't
+      // prevent the system from starting.
       this.consciousness.start(options).catch(async (error) => {
         await util.logLine(colors.red(`Consciousness error: ${error.message}`))
       })
