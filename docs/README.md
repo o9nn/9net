@@ -29,6 +29,7 @@ Llamanet ships with an isomorphic API that works across:
 1. **Ship your app without 3rd party LLMs:** Llamanet is a self-contained library/cli tool that comes with everything you need to serve LLM, natively from your app. No need to download a 3rd party LLM app/server. Your app users only need to install your app. It just works.
 2. **OpenAI API Compatible Server:** Llamanet is a proxy server that can run and route to multiple [Llama.cpp servers](https://github.com/ggerganov/llama.cpp/tree/master/examples/server#llamacpp-http-server), which is [OpenAI API Compatible](https://platform.openai.com/docs/api-reference/chat). This compatibility means you can turn ANY existing OpenAI API powered app into Llama.cpp powered app, with just one line.
 3. **Automagical Model Management System:** The built-in model management system gets rid of the need to separately and manually download checkpoints. Just make an OpenAI compatible API request with ANY GGUF URL on Huggingface. Instead of specifying `"model": "gpt-4-turbo"`, you specify a huggingface url (for example: `"model": "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-fp16.gguf"`) and should automatically download the checkpoint and launch an embedded llama.cpp server with the checkpoint, after which the request will be routed to the server.
+4. **Stream of Consciousness:** Advanced orchestration system that manages 3 concurrent llama.cpp servers working in synchronized phases (7 expressive + 5 reflective steps), creating a continuous stream of consciousness through active inference. Perfect for building AI systems that exhibit emergent cognitive behaviors.
 
 Here's llamanet in action:
 
@@ -463,6 +464,74 @@ npx llamanet models
 ```javascript
 const llamanet = require('llamanet');
 const models = await llamanet.run(["models"])
+```
+
+## 7. consciousness
+
+Manage the Stream of Consciousness system - a sophisticated orchestration of 3 concurrent llama.cpp servers working in synchronized phases. See [CONSCIOUSNESS.md](./CONSCIOUSNESS.md) for full documentation.
+
+### Start Stream of Consciousness
+
+Start 3 threaded servers that cycle through 12 steps (7 expressive + 5 reflective), offset by 120 degrees.
+
+#### CLI
+
+```
+npx llamanet consciousness start --cycles 2 --delay 3000
+```
+
+#### Node.js
+
+```javascript
+const llamanet = require('llamanet');
+await llamanet.run([
+  "consciousness",
+  "start",
+  "--cycles", 2,      // Number of complete cycles
+  "--delay", 3000     // Milliseconds between steps
+])
+```
+
+#### Python
+
+```python
+import llamanet
+llamanet.run([
+  "consciousness",
+  "start",
+  "--cycles", "2",
+  "--delay", "3000"
+])
+```
+
+### Check Consciousness Status
+
+#### CLI
+
+```
+npx llamanet consciousness status
+```
+
+#### Node.js
+
+```javascript
+const llamanet = require('llamanet');
+const status = await llamanet.run(["consciousness", "status"])
+```
+
+### Stop Consciousness Stream
+
+#### CLI
+
+```
+npx llamanet consciousness stop
+```
+
+#### Node.js
+
+```javascript
+const llamanet = require('llamanet');
+await llamanet.run(["consciousness", "stop"])
 ```
 
 ---
