@@ -1,0 +1,35 @@
+{
+  "name": "llamanet",
+  "version": "0.0.18",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:python": "cd python && python setup.py sdist bdist_wheel",
+    "publish:python": "cd python && twine upload dist/*"
+  },
+  "author": "",
+  "license": "MIT",
+  "bin": {
+    "llamanet": "./bin/index.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cross-fetch": "^4.0.0",
+    "decompress": "^4.2.1",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-http-proxy-cp": "^2.0.3",
+    "glob": "^10.4.1",
+    "node-downloader-helper": "^2.1.9",
+    "portfinder-cp": "^1.0.34",
+    "random-useragent": "^0.5.0",
+    "sse-pubsub": "^1.4.5",
+    "systeminformation": "^5.22.9",
+    "yargs": "^17.7.2",
+    "yargs-unparser-custom-flag": "^2.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "openai": "^4.47.2"
+  }
+}
