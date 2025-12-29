@@ -6,3 +6,4 @@ dist
 llamanet.egg-info
 __pycache__
 env
+test_*.js
