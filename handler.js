@@ -4,11 +4,13 @@ const fs = require('fs')
 const path = require('path')
 const llamacpp = require('./llamacpp')
 const util = require("./util")
+const ConsciousnessOrchestrator = require('./consciousness')
 const homedir = process.env.LLAMANET_PATH || path.resolve(os.homedir(), "llamanet")
 class Handler {
   constructor() {
     this.procs = []
     this.default_model = process.env.LLAMANET_DEFAULT_MODEL || "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf"
+    this.consciousness = null
   }
   async call(body, callback) {
     if (body && body._) {
@@ -31,9 +33,55 @@ class Handler {
         } else if (cmd === 'models') {
           let response = await llamacpp.models()
           return response
+        } else if (cmd === 'consciousness') {
+          let response = await this.consciousnessCommand(info, kwargs, callback)
+          return response
         }
       } else {
         // nothing 
+      }
+    }
+  }
+  async consciousnessCommand(info, kwargs, callback) {
+    const [subcommand] = info
+    
+    if (subcommand === 'start') {
+      // Start the stream of consciousness
+      if (!this.consciousness) {
+        this.consciousness = new ConsciousnessOrchestrator(this)
+      }
+      
+      const options = {
+        cycles: kwargs.cycles || 1,
+        stepDelay: kwargs.delay || 5000,
+        models: kwargs.models || []
+      }
+      
+      // Start in background (don't await)
+      this.consciousness.start(options).catch(async (error) => {
+        await util.logLine(colors.red(`Consciousness error: ${error.message}`))
+      })
+      
+      return { status: 'started', message: 'Stream of Consciousness initiated' }
+    } else if (subcommand === 'stop') {
+      // Stop the stream of consciousness
+      if (this.consciousness) {
+        await this.consciousness.stop()
+        return { status: 'stopped', message: 'Stream of Consciousness stopped' }
+      } else {
+        return { status: 'not_running', message: 'Stream of Consciousness was not running' }
+      }
+    } else if (subcommand === 'status') {
+      // Get consciousness status
+      if (this.consciousness) {
+        return this.consciousness.getStatus()
+      } else {
+        return { running: false, message: 'Stream of Consciousness not initialized' }
+      }
+    } else {
+      return { 
+        error: 'Unknown consciousness command',
+        usage: 'consciousness [start|stop|status]'
       }
     }
   }
